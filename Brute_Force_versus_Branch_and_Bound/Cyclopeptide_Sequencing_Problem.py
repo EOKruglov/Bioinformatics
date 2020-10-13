@@ -1,45 +1,13 @@
-mass_table = {
-    'G': 57,
-    'A': 71,
-    'S': 87,
-    'P': 97,
-    'V': 99,
-    'T': 101,
-    'C': 103,
-    'I': 113,
-    'L': 113,
-    'N': 114,
-    'D': 115,
-    'K': 128,
-    'Q': 128,
-    'E': 129,
-    'M': 131,
-    'H': 137,
-    'F': 147,
-    'R': 156,
-    'Y': 163,
-    'W': 186
-}
+masses = [57, 71, 87, 97, 99, 101, 103, 113, 114, 115, 128, 129, 131, 137, 147, 156, 163, 186]
 
 
-def get_cyclo_peptide_pattern(pattern: str, order):
-    return pattern + pattern[0:order]
+def get_cyclo_spectrum(linear_spectrum: list):
+    cyclo_spectrum = [0, sum(linear_spectrum)]
 
-
-def get_mass_sum(pattern: str):
-    mass_sum = 0
-    for i in pattern:
-        mass_sum += mass_table[i]
-    return mass_sum
-
-
-def get_cyclo_spectrum(pattern: str):
-    cyclo_spectrum = [0, get_mass_sum(pattern)]
-
-    for i in range(len(pattern) - 1):
-        c_pattern = get_cyclo_peptide_pattern(pattern, i)
+    for i in range(len(linear_spectrum) - 1):
+        c_pattern = linear_spectrum + linear_spectrum[0:i]
         for j in range(len(c_pattern) - i):
-            cyclo_spectrum.append(get_mass_sum(c_pattern[j:j + i + 1]))
+            cyclo_spectrum.append(sum(c_pattern[j:j + i + 1]))
 
     cyclo_spectrum.sort()
     return cyclo_spectrum
@@ -47,43 +15,38 @@ def get_cyclo_spectrum(pattern: str):
 
 def expand_peptides(peptides: list):
     new_peptides = []
-    for key in mass_table.keys():
+    for v in masses:
         for i in range(0, len(peptides)):
-            new_peptides.append(peptides[i] + key)
+            new_peptides.append(peptides[i] + [v])
     return new_peptides
 
 
-def spectrum_from_peptide(peptide: str):
-    spectrum = []
-    for i in peptide:
-        spectrum.append(str(mass_table[i]))
-    return spectrum
+def print_spectrum(spectrum: list):
+    for i in range(0, len(spectrum)):
+        spectrum[i] = str(spectrum[i])
+    print('-'.join(spectrum))
 
 
 def cyclo_peptide_sequencing(spectrum: list):
     peptides = []
-    output = []
-    for item in mass_table.items():
-        if item[1] in spectrum:
-            peptides.append(item[0])
+    for v in spectrum:
+        if v in masses:
+            peptides.append([v])
 
     while peptides:
         peptides_buff = []
         peptides = expand_peptides(peptides)
         for peptide in peptides:
-            if get_mass_sum(peptide) in spectrum:
+            if sum(peptide) in spectrum:
                 if get_cyclo_spectrum(peptide) == spectrum:
-                    if spectrum_from_peptide(peptide) not in output:
-                        output.append(spectrum_from_peptide(peptide))
+                    print_spectrum(peptide)
                 else:
                     peptides_buff.append(peptide)
-        peptides = peptides_buff.copy()
-    for i in output:
-        print('-'.join(i))
+        peptides = peptides_buff
 
 
 if __name__ == '__main__':
-    str_spectrum = input()
+    str_spectrum = '0 113 128 186 241 299 314 427'
     spectrum = str_spectrum.split(' ')
     for i in range(0, len(spectrum)):
         spectrum[i] = int(spectrum[i])
