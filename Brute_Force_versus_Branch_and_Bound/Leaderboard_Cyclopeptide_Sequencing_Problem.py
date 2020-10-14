@@ -38,8 +38,10 @@ def trim(leader_board: list, spectrum: list, n: int):
         score_list.append(get_linear_score(peptide, spectrum.copy()))
     score_map = list(zip(score_list, leader_board))
     score_map.sort(key=lambda x: x[0], reverse=True)
-    for score, peptide_value in score_map[0:n]:
-        new_leader_board.append(peptide_value)
+    max_score = score_map[0][0]
+    for score, peptide_value in score_map:
+        if score == max_score:
+            new_leader_board.append(peptide_value)
     return new_leader_board
 
 
