@@ -13,6 +13,17 @@ def get_cyclo_spectrum(linear_spectrum: list):
     return cyclo_spectrum
 
 
+def get_linear_spectrum(peptide: list):
+    linear_spectrum = [0, sum(peptide)]
+
+    for i in range(len(peptide) - 1):
+        for j in range(len(peptide) - i):
+            linear_spectrum.append(sum(peptide[j:j + i + 1]))
+
+    linear_spectrum.sort()
+    return linear_spectrum
+
+
 def expand_peptides(peptides: list):
     new_peptides = []
     for v in masses:
@@ -27,26 +38,37 @@ def print_spectrum(spectrum: list):
     print('-'.join(spectrum))
 
 
+def is_consistent(peptide: list, spectrum: list):
+    for i in peptide:
+        if i in spectrum:
+            spectrum.remove(i)
+        else:
+            return False
+    return True
+
+
 def cyclo_peptide_sequencing(spectrum: list):
     peptides = []
-    for v in spectrum:
-        if v in masses:
+    for v in masses:
+        if v in spectrum:
             peptides.append([v])
 
     while peptides:
-        peptides_buff = []
         peptides = expand_peptides(peptides)
-        for peptide in peptides:
-            if sum(peptide) in spectrum:
+        peptides_buff = peptides.copy()
+        for peptide in peptides_buff:
+            if sum(peptide) == spectrum[-1]:
                 if get_cyclo_spectrum(peptide) == spectrum:
                     print_spectrum(peptide)
-                else:
-                    peptides_buff.append(peptide)
-        peptides = peptides_buff
+                while peptide in peptides:
+                    peptides.remove(peptide)
+            elif not is_consistent(get_linear_spectrum(peptide), spectrum.copy()):
+                while peptide in peptides:
+                    peptides.remove(peptide)
 
 
 if __name__ == '__main__':
-    str_spectrum = '0 113 128 186 241 299 314 427'
+    str_spectrum = '0 97 97 99 101 103 196 198 198 200 202 295 297 299 299 301 394 396 398 400 400 497'
     spectrum = str_spectrum.split(' ')
     for i in range(0, len(spectrum)):
         spectrum[i] = int(spectrum[i])
