@@ -15,7 +15,7 @@ def hamming_distance(pattern, dna):
             buff_dna = dna_string[i:i + k]
             buff = 0
             for j in range(len(buff_dna)):
-                if dna_string[j] != pattern[j]:
+                if buff_dna[j] != pattern[j]:
                     buff += 1
             if buff < minimum:
                 minimum = buff
