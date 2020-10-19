@@ -39,14 +39,6 @@ def motif_enumeration(dna, k, d):
 
 
 def main():
-
-    # k_d = ' '.split(input())
-    # dna_1 = input()
-    # dna_2 = input()
-    # dna_3 = input()
-    # dna_4 = input()
-    # dna = [dna_1, dna_2, dna_3, dna_4]
-
     k = 4
     d = 1
     dna = ['CACTGATCGACTTATC', 'CTCCGACTTACCCCAC', 'GTCTATCCCTGATGGC', 'CAGGGTTGTCTTGTCT']
