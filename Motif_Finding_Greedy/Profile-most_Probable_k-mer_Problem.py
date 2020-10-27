@@ -23,10 +23,10 @@ def main():
 
     for i in range(len(dna) - k + 1):
         pattern = dna[i:i + k]
-        buf_probability = 0
+        buf_probability = 1
         for j, m in enumerate(pattern):
-            buf_probability += profile_dict[m][j]
-        if buf_probability >= probability:
+            buf_probability *= profile_dict[m][j]
+        if buf_probability > probability:
             probability = buf_probability
             result = pattern
     print(result)
