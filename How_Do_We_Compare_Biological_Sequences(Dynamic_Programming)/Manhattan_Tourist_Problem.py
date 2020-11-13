@@ -1,15 +1,15 @@
 def manhattan_tourist(n, m, down, right):
-    s = [[0 for i in range(m)] for j in range(n)]
-    for i in range(1, n):
-        s[i][0] = s[i - 1][0] + down[i][0]
+    s = [[0 for i in range(m + 1)] for j in range(n + 1)]
+    for i in range(n):
+        s[i + 1][0] = s[i][0] + down[i][0]
 
-    for j in range(1, m):
-        s[0][j] = s[0][j - 1] + right[0][j]
+    for j in range(m):
+        s[0][j + 1] = s[0][j] + right[0][j]
 
-    for i in range(1, n):
-        for j in range(1, m):
-            s[i][j] = max([s[i - 1][j] + down[i][j], s[i][j - 1] + right[i][j]])
-    return s[n - 1][m - 1]
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            s[i][j] = max([s[i - 1][j] + down[i - 1][j], s[i][j - 1] + right[i][j - 1]])
+    return s[n][m]
 
 
 def main():
