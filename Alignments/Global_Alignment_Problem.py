@@ -57,8 +57,8 @@ def lcs_backtrack(v, w):
     for j in range(m):
         s[0][j] = -sigma * j
         backtrack[0][j] = 'blue'
-    for i in range(1, len(w) + 1):
-        for j in range(1, len(v) + 1):
+    for i in range(1, n):
+        for j in range(1, m):
             f = scoring_matrix[buff_dict[v[j - 1]]][buff_dict[w[i - 1]]]
             s[i][j] = max(s[i - 1][j] - sigma, s[i][j - 1] - sigma, s[i - 1][j - 1] + f)
             if s[i][j] == s[i - 1][j] - sigma:
