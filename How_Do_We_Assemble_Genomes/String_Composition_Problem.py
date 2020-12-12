@@ -5,5 +5,5 @@ def main():
         print(input_str[i:k + i])
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()
