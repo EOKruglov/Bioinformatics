@@ -2,14 +2,15 @@ def main():
     nodes = []
     edges = {}
     while True:
-        inp = input()
-        if inp == '':
+        try:
+            inp = input()
+            inp = inp.split(' -> ')
+            in_node = inp[0]
+            nodes.append(in_node)
+            out_nodes = inp[1].split(',')
+            nodes += out_nodes
+        except:
             break
-        inp = inp.split(' -> ')
-        in_node = inp[0]
-        nodes.append(in_node)
-        out_nodes = inp[1].split(',')
-        nodes += out_nodes
         if isinstance(out_nodes, list):
             edges[in_node] = out_nodes
         else:
