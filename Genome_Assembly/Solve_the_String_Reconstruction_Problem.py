@@ -2,10 +2,11 @@ def main():
     k = int(input())
     pattern_lst = []
     while True:
-        inp = input()
-        if inp == "":
+        try:
+            inp = input()
+            pattern_lst.append(inp)
+        except:
             break
-        pattern_lst.append(inp)
 
     edges = {}
     adjacency = {}
