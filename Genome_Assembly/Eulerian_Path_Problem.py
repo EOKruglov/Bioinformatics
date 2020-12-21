@@ -1,26 +1,33 @@
 def main():
     nodes = []
     has_inputs = []
+    has_outputs = []
     edges = {}
     adjacency = {}
     while True:
-        inp = input()
-        if inp == '':
+        try:
+            inp = input()
+            inp = inp.split(' -> ')
+            node = inp[0]
+            nodes.append(node)
+            out_nodes = inp[1].split(',')
+            if not isinstance(out_nodes, list):
+                out_nodes = [out_nodes]
+            nodes += out_nodes
+            edges[node] = out_nodes
+            has_inputs += out_nodes
+            has_outputs.append(node)
+            for out_node in out_nodes:
+                if out_node in adjacency.keys():
+                    adjacency[out_node] += 1
+                else:
+                    adjacency[out_node] = 1
+        except:
             break
-        inp = inp.split(' -> ')
-        node = inp[0]
-        nodes.append(node)
-        out_nodes = inp[1].split(',')
-        if not isinstance(out_nodes, list):
-            out_nodes = [out_nodes]
-        nodes += out_nodes
-        edges[node] = out_nodes
-        has_inputs += out_nodes
-        for out_node in out_nodes:
-            if out_node in adjacency.keys():
-                adjacency[out_node] += 1
-            else:
-                adjacency[out_node] = 1
+
+    for node in set(nodes):
+        if node not in edges.keys():
+            edges[node] = []
 
     for node in set(nodes):
         if node in adjacency.keys():
@@ -33,13 +40,9 @@ def main():
         if v % 2 != 0:
             odd_nodes.append(k)
 
-    start_node = None
-    for node in odd_nodes:
-        if node not in set(has_inputs):
-            start_node = node
-            odd_nodes.remove(node)
-            break
-    finish_node = odd_nodes[0]
+    [start_node, finish_node] = [odd_nodes[0], odd_nodes[1]] if odd_nodes[0] not in has_inputs or odd_nodes[1] not in \
+                                                                has_outputs else [odd_nodes[1], odd_nodes[0]]
+
     edges[finish_node] += [start_node]
 
     cycle = [start_node]
@@ -63,7 +66,7 @@ def main():
     else:
         for i in range(len(cycle) - 1):
             if cycle[i + 1] == start_node and cycle[i] == finish_node:
-                cycle = cycle[i + 1:] + cycle[0: i + 1]
+                cycle = cycle[i + 1: -1] + cycle[0: i + 1]
                 break
     print("->".join(cycle))
 
